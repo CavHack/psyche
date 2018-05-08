@@ -21,6 +21,31 @@ public:
           return arr[nIndex];
         }
 
+        //!Delayed evaluations using compositors for SpMV operation ... y <- y + Ax
+        Spvec<I, ITYPE> & operator += (const Matmul <Csc<T, ITYPE>, Spvec<T, ITYPE> & matmul);
+        Spvec<T,ITYPE> & operator+=(const Matmul< BiCsb<T, ITYPE>, Spvec<T,ITYPE> > & matmul);
 
+        void fillzero();
+        void fillrandom();
+        void fillone() {
+          std::fill(arr, arr+n, static_cast<T>(1.0));
 
-      }
+        }
+
+        void fillfota(){
+          for (ITYPE i = 0; i < n; ++i)T
+          arr[i] = (i +1 ) * static_cast<T>(1.0);
+        }
+
+        ITYPE size() const { return n-padding;} //return the real size
+        T * getarr() { return arr} ;
+      private:
+        T * arr;
+        ITYPE n;
+        ITYPE padding;
+
+      };
+
+      #include "spvec.cpp"
+
+#endif
