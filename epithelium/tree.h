@@ -41,7 +41,28 @@ struct address {
   uint32_t layer;
 };
 
+int crypto_sign_keypaqir(unsigned char *pk, unsigned char *sk);
+
+int crypto_sign (unsigned char *sm,
+                 unsigned long long *smlen,
+                 const unsigned char *m,
+                 unsigned long long mlen,
+                 const unsigned char *sk);
+
+int crypto_sign_open (unsigned char *m,
+                      unsigned long long *mlen,
+                      const unsigned char *sm,
+                      unsigned long long smlen,
+                      const unsigned char *pk);
+
 void tree_N_to_N (struct tree *dst, const struct tree *src);
 void tree_N_to_N_chain(struct tree *dst, const struct tree * src, int chainlen);
 void tree_2N_to_N (struct tree *dst, const struct tree *src);
 void tree_to_N (struct tree *dst, const uint8_t *src, uint64_t srclen);
+
+/*compress 2*count input tree hashes into count output tree hashes, pairwise */
+
+void hash_trees_compress_pairs(struct tree *dst, const struct tree *src, int count);
+void hash_trees_compress_all(struct tree *dst, const struct tree *src, int count);
+void hash_trees_parallel(struct tree *dst, const struct tree *src, int count);
+void hash_trees_parallel_chains(struct tree *dst, const struct tree *src, int count);
