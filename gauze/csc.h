@@ -7,6 +7,13 @@ template <class T, class ITYPE>
 struct simplex;
 
 template <class T, class ITYPE>
+class Csc {
+
+public:
+  Csc ():nz(0), m(0), n(0), logicalnz(0), issym(false) {}
+  Csc (ITYPE size, ITYPE rows, ITYPE cols, bool isSym=false);
+  Csc(const Csc<T, ITYPE> & rhs );
+  ~Csc();
   Csc<T, ITYPE> & operator=(const Csc<T, ITYPE> & rhs);// assignment operator
   Csc(Simplex<T, ITYPE> * simplex,  ITYPE size, ITYPE rows, ITYPE cols, bool isSym = false );
   Csc(ITYPE * ri, ITYPE * ci, T * val, ITYPE size, ITYPE rows, ITYPE cols, bool isSym =  false );
