@@ -1,10 +1,20 @@
 /*
+#ifndef __MIXTURE_H_
+#define __MIXTURE_H_
 * Copyright Venire Labs Inc (c) All rights reserved
 */
+#ifndef __MIXTURE_H_
+#define __MIXTURE_H_
+
+#include <openssl/sha.h>
+#include <openssl/ripemd.h>
+
 
 #pragma once
 
 #include<stdint.h>
+
+#define PWF_BUF_SZ 1024
 
 static const uint32_t rc[48 * 4] = {
 
@@ -65,5 +75,15 @@ static const uint8_t sbox[256] =
   0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf, 0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42,
   0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16 };
 
+  typedef union hash160_u{
+    unsigned char uc[RIPEMD160_DIGEST_LENGTH];
+    uint32_t ul[RIPEMD160_DIGEST_LENGTH>>2];
+  } hash160_t;
 
-};
+  typedef struct keydata_u {
+    int state;
+    unsigned char[PWF_BUF_SZ] password;
+    unsigned char[SHA256_DIGEST_LENGTH] priv;
+    unsigned char[RIPEMD160_DIGEST_LENGTH] uaddr;
+    unsigned char[RIPEMD160_DIGEST_LENGTH] caddr;
+  } keydata_t;
