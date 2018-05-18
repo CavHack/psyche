@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "wonce.h"
+#include "wots.h"
 
 struct lamportBlock_pk {
   struct tree k;
