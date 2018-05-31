@@ -1,5 +1,5 @@
 /*
-* Venire Labs Inc (c) 2018  All rights reserved.
+* Venire Labs Inc (c) All rights reserved.
 */
 
 #pragma once
@@ -65,12 +65,4 @@ void tree_to_N (struct tree *dst, const uint8_t *src, uint64_t srclen);
 void hash_trees_compress_pairs(struct tree *dst, const struct tree *src, int count);
 void hash_trees_compress_all(struct tree *dst, const struct tree *src, int count);
 void hash_trees_parallel(struct tree *dst, const struct tree *src, int count);
-void hash_trees_parallel_chains(struct tree *dst, const struct tree *src, int count, int chainlen);
-
-/*Hashing ciphers*/
-#define treecmp(a,b) memcmp((a)->h, (b)->h, TREE_SIZE)
-
-#define treecmpN(a,b,N) memcmp((a)->h, (b)->h, (N)*TREE_SIZE)
-
-
-#define treecpy(a,b) memcpy ((a)->h, (b)->h, TREE_SIZE)
+void hash_trees_parallel_chains(struct tree *dst, const struct tree *src, int count);
