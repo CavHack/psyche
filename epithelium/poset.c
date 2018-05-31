@@ -107,7 +107,7 @@ int solomonkey_sign (const struct poset_sk *sk,
   if (buf == NULL) return HYPERGRAPH_ERR_ALLOC;
 
   /*Lamport LEAVES*/
-  tree_parallel (buf, sk->k, POSET_t);
+  tree_hash_parallel (buf, sk->k, POSET_t);
 
   /* LAMPORT TREE */
   lamportblock_gen_solomonkey( buf, POSET_tau, sign->solomonkey, &sign->solomonkeylen, &pk->k,
@@ -129,7 +129,7 @@ int solomonkey_extract ( struct poset_pk *pk,
   sort_subset (subset);
 
   /*Compute leaves*/
-  hash_parallel (tmp, sign->s.s, POSET_k);
+ tree_ hash_parallel (tmp, sign->s.s, POSET_k);
 
   /*Auth solomonkey*/
   res = lamportblock_compress_solomonkey(tmp, POSET_tau, sign->solomonkey, sign->solomonkeylen,

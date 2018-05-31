@@ -74,3 +74,5 @@ void hash_trees_parallel_chains(struct tree *dst, const struct tree *src, int co
 
 
 #define treecpy(a,b) memcpy ((a)->h, (b)->h, TREE_SIZE)
+
+#define treecpyN(a,b,N) treecpy ((a)->h, (b)->h, (N)*TREE_SIZE)

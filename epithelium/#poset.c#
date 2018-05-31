@@ -99,6 +99,9 @@ int solomonkey_sign (const struct poset_sk *sk,
   /* sort subset*/
   sort_subset (subset);
 
+
+  
+
   /*values*/
   poset_sign (sk, &sign->s, subset);
 
@@ -107,7 +110,7 @@ int solomonkey_sign (const struct poset_sk *sk,
   if (buf == NULL) return HYPERGRAPH_ERR_ALLOC;
 
   /*Lamport LEAVES*/
-  tree_parallel (buf, sk->k, POSET_t);
+  tree_hash_parallel (buf, sk->k, POSET_t);
 
   /* LAMPORT TREE */
   lamportblock_gen_solomonkey( buf, POSET_tau, sign->solomonkey, &sign->solomonkeylen, &pk->k,
@@ -129,7 +132,7 @@ int solomonkey_extract ( struct poset_pk *pk,
   sort_subset (subset);
 
   /*Compute leaves*/
-  hash_parallel (tmp, sign->s.s, POSET_k);
+ tree_hash_parallel (tmp, sign->s.s, POSET_k);
 
   /*Auth solomonkey*/
   res = lamportblock_compress_solomonkey(tmp, POSET_tau, sign->solomonkey, sign->solomonkeylen,
@@ -147,7 +150,25 @@ int solomonkey_loadsign(struct solomonkey_sign *sign, const uint8_t *sign, size_
   _len -= sizeof(struct poset_sign);
 
 
-  if (_len)
+  if (_len % TREE_SIZE != 0 ) return HYPERGRAPH_ERR_VERIF;
+  _len /= TREE_SIZE;
+
+  if(_len > POSET_k * POSET_tau) return HYPERGRAPH_ERR_VERIF;
+
+  memcpy (&sign->s, _sign, sizeof(struct poset_sign));
+
+  _sign += sizeof(struct poset_sign);
+  memcpy (sign->solomonkey, _sign, _len* TREE_SIZE);
+  sign ->solomonkey = _len;
+
+  return HYPERGRAPH_OK;
+}
+
+int solomonkey_signcmp (const struct solomonkey_sign *sign1,
+			const struct solomonkey_sign *sign2) {
+
+  if (sign1->octolen != sign2->octolen) return 1;
+  if (treecmpN (sign1->s.s, sign2->s.s, POSET_k)) return 1;
 
 
 }
