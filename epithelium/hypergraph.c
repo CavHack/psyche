@@ -49,7 +49,7 @@ int hypergraph_genpk(const struct hypergraph_sk *sk, struct hypergraph_pk *pk) {
 
 }
 
-int hypergraph_genpk (const struct hypergraph_sk *sk, struct hypergraph_sign *sign, const struct tree *msg) {
+int hypergraph_sign (const struct hypergraph_sk *sk, struct hypergraph_sign *sign, const struct tree *msg) {
 
   struct tree buf[2];
   struct address address;
@@ -105,8 +105,22 @@ int hypergraph_genpk (const struct hypergraph_sk *sk, struct hypergraph_sign *si
   }
 
 
+  #if HYPERGRAPH_c > 0 
+  /*Cached Lamport Block tree*/
+  offset = 0;
+  for (i=0; i < HYPERGRAPH_c; ++i) {
+    sibling = address.index ^ 1;
+    hashcpy(&sign->auth[i], &sk->cache[offset + sibling]);
 
-
-
+    address.index >>=1;
+    offset += n;
+    n>>=1;
 
 }
+
+#endif
+
+}
+
+return HYPERGRAPH_OK;
+
