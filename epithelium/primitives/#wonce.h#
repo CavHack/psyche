@@ -1,0 +1,22 @@
+/*
+ * Venire Labs Inc 2018 -  All right reserved
+ */
+
+#pragma once
+
+#include "common.h"
+#include "tree.h"
+
+/*Naive Winterniz OTS*/
+
+struct wonce_sk {
+  struct tree k[WONCE_ell];
+};
+
+struct wonce_pk{
+  struct tree k[WONCE_ell];
+};
+
+struct wonce_sign {
+  struct tree k[WONCE_ell];
+};

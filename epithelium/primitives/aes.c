@@ -18,6 +18,48 @@ int aesctr256(uint8_t *out, const uint8_t *sk, const void *counter, int bytes) {
     goto label_exit_0;
   }
 
-  if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_ctr(), ))
+  if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_ctr(), NULL, sk, counter)){
+  
+    ret = -3;
+    goto label_exit_1;
+    
 
+  }
+
+  while (bytes >= (int)sizeof(buffer)) {
+    if(1 != EVP_EncryptUpdate(ctx, out, &len, buffer, sizeof(buffer))) {
+      ret = -4;
+      goto label_exit_1;
+    }
+
+    out += sizeof(buffer);
+    bytes -= sizeof(buffer);
+
+  }
+
+ if(bytes) {
+   if(1 != EVP_EncryptUpdate(ctx, out, &len, buffer, bytes)) {
+     ret  = -4;
+     goto label_exit_1;
+   }
+   
+}
+
+ if(1 != EVP_EncryptFinal_ex(ctx, out + len, &len)){
+   ret = -5;
+   goto label_exit_1;
+ }
+
+
+
+ret = 0;
+label_exit_1:
+EVP_CIPHER_CTX_free(ctx);
+label_exit_0:
+return ret;
+}
+
+int aesctr256_zeroiv(uint8_t *out, const uint8_t *sk, int bytes) {
+  uint8_t counter[16] = {0};
+  return aesctr256(out, sk, counter, bytes);
 }
